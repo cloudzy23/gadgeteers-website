@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Gadgeteers - FRC Team 9670</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+<body>
+    <!-- 3D Canvas Background -->
+    <canvas id="three-canvas"></canvas>
+    
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="{{ url_for('static', filename='images/logo.jpeg') }}" alt="Gadgeteers Logo" class="logo-img">
+                <span class="team-name">The Gadgeteers</span>
+                <span class="team-number">#9670</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#about" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#teams" class="nav-link">Teams</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/mentors" class="nav-link">Mentors</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#accomplishments" class="nav-link">Accomplishments</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#contact" class="nav-link">Contact</a>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">The Gadgeteers</h1>
+                <h2 class="hero-subtitle">FRC Team 9670</h2>
+                <p class="hero-description">The 4-H NASA Gadgeteers of St. Johns County</p>
+                <p class="hero-tagline">Building the Future, One Robot at a Time</p>
+                <div class="hero-buttons">
+                    <a href="#teams" class="btn btn-primary">Meet Our Team</a>
+                    <a href="#accomplishments" class="btn btn-secondary">Our Achievements</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-image-container">
+                    <img src="{{ url_for('static', filename='images/team-photo.jpeg') }}" alt="The Gadgeteers Team" class="hero-team-photo">
+                    <div class="gear-container">
+                        <div class="gear-3d" id="main-gear"></div>
+                        <div class="floating-particles"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="scroll-arrow"></div>
+            <span>Scroll to explore</span>
+        </div>
+    </section>
+
+    <!-- Mission Statement -->
+    <section id="about" class="mission">
+        <div class="container">
+            <h2 class="section-title" data-scroll-animation>Our Mission</h2>
+            <div class="mission-content">
+                <p class="mission-statement" data-scroll-animation>
+                    At The Gadgeteers, we are dedicated to inspiring young minds through the exciting world of robotics and STEM education. 
+                    As a community-wide team representing St. Johns County, Florida, we strive to build not just robots, but character, 
+                    teamwork, and innovation. Through FIRST Robotics Competition, we empower students to become tomorrow's leaders in 
+                    science, technology, engineering, and mathematics while fostering creativity, problem-solving skills, and gracious professionalism.
+                </p>
+                <div class="mission-values">
+                    {% for value in mission_values %}
+                    <div class="value-item" data-scroll-animation>
+                        <i class="fas fa-{{ value.icon }}"></i>
+                        <h3>{{ value.title }}</h3>
+                        <p>{{ value.description }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Photo Showcase -->
+    <section class="team-showcase">
+        <div class="container">
+            <h2 class="section-title" data-scroll-animation>Meet The Gadgeteers</h2>
+            <div class="team-photo-container" data-scroll-animation>
+                <img src="{{ url_for('static', filename='images/team-photo.jpeg') }}" alt="The Gadgeteers Team 2025" class="team-showcase-photo">
+                <div class="photo-overlay">
+                    <div class="photo-caption">
+                        <h3>The Gadgeteers 2025</h3>
+                        <p>Building the Future, One Robot at a Time</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Teams Section -->
+    <section id="teams" class="teams">
+        <div class="container">
+            <h2 class="section-title" data-scroll-animation>Team Members</h2>
+            <div class="team-tabs">
+                <button class="tab-button active" data-tab="2025">2025 Team</button>
+                <button class="tab-button" data-tab="2024">2024 Team</button>
+            </div>
+            
+            {% for year, team in team_data.items() %}
+            <div id="team-{{ year }}" class="team-content {% if year == '2025' %}active{% endif %}">
+                <h3 class="team-year">{{ team.year }} Season</h3>
+                <p class="team-description">{{ team.description }}</p>
+                <div class="team-grid">
+                    {% for member in team.members %}
+                    <div class="member-card" data-scroll-animation>
+                        <div class="member-avatar">
+                            <i class="fas fa-user-astronaut"></i>
+                        </div>
+                        <div class="member-info">
+                            <h4>{{ member.name }}</h4>
+                            <p class="role">{{ member.role }}</p>
+                        </div>
+                        <div class="member-glow"></div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Accomplishments Section -->
+    <section id="accomplishments" class="accomplishments">
+        <div class="container">
+            <h2 class="section-title" data-scroll-animation>Our Accomplishments</h2>
+            <div class="accomplishments-grid">
+                {% for achievement in accomplishments %}
+                <div class="achievement-card" data-scroll-animation>
+                    <div class="achievement-year">{{ achievement.year }}</div>
+                    <div class="achievement-content">
+                        <i class="fas fa-{{ achievement.icon }}"></i>
+                        <h3>{{ achievement.title }}</h3>
+                        <p class="achievement-status">{{ achievement.status }}</p>
+                        <p class="achievement-description">{{ achievement.description }}</p>
+                    </div>
+                    <div class="achievement-glow"></div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title" data-scroll-animation>Get In Touch</h2>
+            <div class="contact-content">
+                <div class="contact-grid">
+                    <div class="contact-info" data-scroll-animation>
+                        <h3>Join The Gadgeteers</h3>
+                        <p>Interested in robotics? Want to be part of our team? We'd love to hear from you!</p>
+                        <div class="contact-details">
+                            <div class="contact-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>St. Johns County, Florida</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fab fa-instagram"></i>
+                                <a href="https://www.instagram.com/thegadgeteers9670/" target="_blank">@thegadgeteers9670</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="contact-image" data-scroll-animation>
+                        <img src="{{ url_for('static', filename='images/team-photo.jpeg') }}" alt="The Gadgeteers Team" class="contact-team-photo">
+                        <div class="contact-image-overlay">
+                            <p>Ready to join our amazing team?</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <span class="team-name">The Gadgeteers</span>
+                    <span class="team-number">FRC Team 9670</span>
+                </div>
+                <div class="footer-text">
+                    <p>&copy; 2025 The Gadgeteers - FRC Team 9670. All rights reserved.</p>
+                    <p>The 4-H NASA Gadgeteers of St. Johns County</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loading-gear">
+            <i class="fas fa-cog"></i>
+        </div>
+        <p>Loading The Gadgeteers...</p>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/three-scene.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

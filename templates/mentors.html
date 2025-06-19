@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentors - The Gadgeteers FRC Team 9670</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+<body>
+    <!-- 3D Canvas Background -->
+    <canvas id="three-canvas"></canvas>
+    
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="{{ url_for('static', filename='images/logo.jpeg') }}" alt="Gadgeteers Logo" class="logo-img">
+                <span class="team-name">The Gadgeteers</span>
+                <span class="team-number">#9670</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="/" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/#about" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/#teams" class="nav-link">Teams</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/mentors" class="nav-link active">Mentors</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/#accomplishments" class="nav-link">Accomplishments</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/#contact" class="nav-link">Contact</a>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mentors Hero Section -->
+    <section class="mentors-hero">
+        <div class="container">
+            <div class="mentors-hero-content">
+                <h1 class="mentors-title">Our Mentors</h1>
+                <h2 class="mentors-subtitle">The Guiding Force Behind The Gadgeteers</h2>
+                <p class="mentors-description">
+                    Meet the incredible mentors who guide, teach, and inspire our team to reach new heights. 
+                    Their expertise and dedication are the foundation of our success.
+                </p>
+                <div class="mentors-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">{{ mentors|length }}</span>
+                        <span class="stat-label">Expert Mentors</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">24/7</span>
+                        <span class="stat-label">Dedicated Support</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mentors Grid Section -->
+    <section class="mentors-grid-section">
+        <div class="container">
+            <h2 class="section-title" data-scroll-animation>Meet Our Mentors</h2>
+            <div class="mentors-grid">
+                {% for mentor in mentors %}
+                <div class="mentor-card" data-scroll-animation>
+                    <div class="mentor-avatar">
+                        <i class="fas fa-{{ mentor.icon }}"></i>
+                    </div>
+                    <div class="mentor-info">
+                        <h3 class="mentor-name">{{ mentor.name }}</h3>
+                        <p class="mentor-role">{{ mentor.role }}</p>
+                        <p class="mentor-description">{{ mentor.description }}</p>
+                    </div>
+                    <div class="mentor-glow"></div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Mentorship Philosophy Section -->
+    <section class="mentorship-philosophy">
+        <div class="container">
+            <h2 class="section-title" data-scroll-animation>Our Mentorship Philosophy</h2>
+            <div class="philosophy-content">
+                <div class="philosophy-text" data-scroll-animation>
+                    <h3>Inspiring Excellence Through Guidance</h3>
+                    <p>
+                        At The Gadgeteers, our mentors don't just teach technical skills – they inspire a passion for 
+                        learning, innovation, and teamwork. Each mentor brings unique expertise and real-world experience, 
+                        creating a rich learning environment where students can thrive.
+                    </p>
+                    <p>
+                        From programming and mechanical design to social media and sponsorships, our mentors cover every 
+                        aspect of what it takes to run a successful robotics team. They guide our students through 
+                        challenges, celebrate victories, and help build the next generation of STEM leaders.
+                    </p>
+                </div>
+                <div class="philosophy-features" data-scroll-animation>
+                    <div class="feature-item">
+                        <i class="fas fa-graduation-cap"></i>
+                        <h4>Expert Knowledge</h4>
+                        <p>Industry professionals sharing real-world expertise</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-heart"></i>
+                        <h4>Passionate Teaching</h4>
+                        <p>Dedicated volunteers who love inspiring young minds</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-rocket"></i>
+                        <h4>Innovation Focus</h4>
+                        <p>Encouraging creative problem-solving and innovation</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-users-cog"></i>
+                        <h4>Team Building</h4>
+                        <p>Fostering collaboration and leadership skills</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="mentors-cta">
+        <div class="container">
+            <div class="cta-content" data-scroll-animation>
+                <h2>Want to Become a Mentor?</h2>
+                <p>Join our incredible team of mentors and help shape the future of robotics education!</p>
+                <div class="cta-buttons">
+                    <a href="/#contact" class="btn btn-primary">Get Involved</a>
+                    <a href="https://www.instagram.com/thegadgeteers9670/" target="_blank" class="btn btn-secondary">Follow Our Journey</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <span class="team-name">The Gadgeteers</span>
+                    <span class="team-number">FRC Team 9670</span>
+                </div>
+                <div class="footer-text">
+                    <p>&copy; 2025 The Gadgeteers - FRC Team 9670. All rights reserved.</p>
+                    <p>The 4-H NASA Gadgeteers of St. Johns County</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loading-gear">
+            <i class="fas fa-cog"></i>
+        </div>
+        <p>Loading Mentors...</p>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/three-scene.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
