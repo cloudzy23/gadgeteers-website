@@ -1,10 +1,19 @@
-from flask import Flask, render_template, jsonify
-import json
+const express = require('express');
+const path = require('path');
 
-app = Flask(__name__)
+const app = express();
+const PORT = process.env.PORT || 5000;
 
-# Team data
-TEAM_DATA = {
+// Set EJS as template engine
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+// Serve static files
+app.use('/static', express.static(path.join(__dirname, 'static')));
+app.use(express.static('public'));
+
+// Team data
+const TEAM_DATA = {
     "2024": {
         "year": "2024",
         "description": "Our inaugural season team that laid the foundation for our success.",
@@ -32,9 +41,9 @@ TEAM_DATA = {
             {"name": "Eli", "role": "Hardware Expert"}
         ]
     }
-}
+};
 
-ACCOMPLISHMENTS = [
+const ACCOMPLISHMENTS = [
     {
         "year": "2024",
         "title": "Rookie All Star Award",
@@ -49,9 +58,9 @@ ACCOMPLISHMENTS = [
         "description": "Building on our rookie success, we achieved an outstanding second overall placement, showcasing our team's growth and dedication to excellence.",
         "icon": "trophy"
     }
-]
+];
 
-MISSION_VALUES = [
+const MISSION_VALUES = [
     {
         "icon": "lightbulb",
         "title": "Innovation",
@@ -67,9 +76,9 @@ MISSION_VALUES = [
         "title": "Excellence",
         "description": "Striving for the highest standards in everything we do"
     }
-]
+];
 
-MENTORS = [
+const MENTORS = [
     {
         "name": "Coach Greene",
         "role": "Head Coach",
@@ -112,49 +121,53 @@ MENTORS = [
         "icon": "tasks",
         "description": "Organizing workflows and ensuring project success"
     }
-]
+];
 
-@app.route('/')
-def index():
-    """Main page route"""
-    return render_template('index.html',
-                         team_data=TEAM_DATA,
-                         accomplishments=ACCOMPLISHMENTS,
-                         mission_values=MISSION_VALUES)
+// Routes
+app.get('/', (req, res) => {
+    res.render('index', {
+        team_data: TEAM_DATA,
+        accomplishments: ACCOMPLISHMENTS,
+        mission_values: MISSION_VALUES
+    });
+});
 
-@app.route('/mentors')
-def mentors():
-    """Mentors page route"""
-    return render_template('mentors.html',
-                         mentors=MENTORS,
-                         team_data=TEAM_DATA)
+app.get('/mentors', (req, res) => {
+    res.render('mentors', {
+        mentors: MENTORS,
+        team_data: TEAM_DATA
+    });
+});
 
-@app.route('/api/team/<year>')
-def get_team_data(year):
-    """API endpoint to get team data for a specific year"""
-    if year in TEAM_DATA:
-        return jsonify(TEAM_DATA[year])
-    return jsonify({"error": "Team data not found"}), 404
+// API endpoints
+app.get('/api/team/:year', (req, res) => {
+    const year = req.params.year;
+    if (TEAM_DATA[year]) {
+        res.json(TEAM_DATA[year]);
+    } else {
+        res.status(404).json({"error": "Team data not found"});
+    }
+});
 
-@app.route('/api/accomplishments')
-def get_accomplishments():
-    """API endpoint to get accomplishments data"""
-    return jsonify(ACCOMPLISHMENTS)
+app.get('/api/accomplishments', (req, res) => {
+    res.json(ACCOMPLISHMENTS);
+});
 
-@app.route('/api/mission')
-def get_mission():
-    """API endpoint to get mission values"""
-    return jsonify(MISSION_VALUES)
+app.get('/api/mission', (req, res) => {
+    res.json(MISSION_VALUES);
+});
 
-@app.route('/api/mentors')
-def get_mentors():
-    """API endpoint to get mentors data"""
-    return jsonify(MENTORS)
+app.get('/api/mentors', (req, res) => {
+    res.json(MENTORS);
+});
 
-@app.route('/health')
-def health_check():
-    """Health check endpoint"""
-    return jsonify({"status": "healthy", "team": "The Gadgeteers #9670"})
+app.get('/health', (req, res) => {
+    res.json({"status": "healthy", "team": "The Gadgeteers #9670"});
+});
 
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+// Start server
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 The Gadgeteers website is running on http://localhost:${PORT}`);
+    console.log(`📱 Team: The Gadgeteers #9670`);
+    console.log(`🤖 Ready to showcase our robotics team!`);
+});
